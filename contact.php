@@ -191,12 +191,12 @@ try {
                 <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
                 Mekarsa<span>.</span>
             </a>
-            <ul class="nav-links">
+                        <ul class="nav-links">
                 <li><a href="index.php">Beranda</a></li>
                 <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php">Tentang Kami</a></li>
                 <li><a href="support-service.php">Shoe Clean</a></li>
-                <li><a href="contact.php" class="active">Kontak</a></li>
+                <li><a href="contact.php">Kontak</a></li>
             </ul>
             <div class="nav-actions">
                 <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="btn btn-primary">
@@ -328,13 +328,13 @@ try {
                     </div>
                 </div>
                 <div class="footer-col">
-                    <h4>Menu Cepat</h4>
+                                        <h4>Menu Cepat</h4>
                     <ul class="footer-links">
                         <li><a href="index.php">Beranda</a></li>
                         <li><a href="menu.php">Menu Coffee</a></li>
                         <li><a href="about.php">Tentang Kami</a></li>
-                        <li><a href="support-service.php">Shoe Clean</a></li>
-                        <li><a href="order.php">Form Pemesanan</a></li>
+                        <li><a href="support-service.php">Layanan Shoe Clean</a></li>
+                        <li><a href="contact.php">Kontak</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">

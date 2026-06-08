@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
                 <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
                 <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
             </a>
-            <ul class="nav-links">
+                        <ul class="nav-links">
                 <li><a href="index.php">Beranda</a></li>
                 <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php">Tentang Kami</a></li>
@@ -273,10 +273,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
                     <p><?= htmlspecialchars($settings['description'] ?? 'Mekarsa Coffee Bar') ?></p>
                 </div>
                 <div class="footer-col">
-                    <h4>Menu Cepat</h4>
+                                        <h4>Menu Cepat</h4>
                     <ul class="footer-links">
                         <li><a href="index.php">Beranda</a></li>
-                        <li><a href="menu.php">Menu</a></li>
+                        <li><a href="menu.php">Menu Coffee</a></li>
+                        <li><a href="about.php">Tentang Kami</a></li>
+                        <li><a href="support-service.php">Layanan Shoe Clean</a></li>
+                        <li><a href="contact.php">Kontak</a></li>
                     </ul>
                 </div>
             </div>
