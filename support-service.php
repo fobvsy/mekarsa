@@ -30,7 +30,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layanan Shoe Clean - Mekarsa Coffee Bar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/style.css?v=1780916164">
     <meta name="description" content="Layanan perawatan dan pembersihan sepatu profesional di Mekarsa Shoe Clean & Coffee Bar, Kartasura. Regular clean, deep clean, unyellowing, repaint, dan restorasi.">
     <style>
         .page-header {

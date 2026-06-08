@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keranjang & Checkout - <?= htmlspecialchars($settings['business_name']) ?></title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/style.css?v=1780916164">
     <style>
         .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
         .cart-table th { text-align: left; padding: 1rem; border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); }

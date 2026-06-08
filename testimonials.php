@@ -45,7 +45,7 @@ function renderStars(int $rating): string {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Testimoni Pelanggan - <?= htmlspecialchars($settings['business_name']) ?></title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/style.css?v=1780916164">
     <meta name="description" content="Apa kata pelanggan setia <?= htmlspecialchars(strip_tags($settings['business_name'])) ?>? Baca ulasan jujur mereka.">
     <style>
         /* Page Header */

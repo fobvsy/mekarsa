@@ -47,7 +47,7 @@ try {
     <!-- Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- CSS -->
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/style.css?v=1780916164">
     <!-- SEO Meta Tags -->
     <meta name="description" content="<?= htmlspecialchars(substr(strip_tags($article['content']), 0, 150)) ?>...">
 </head>
