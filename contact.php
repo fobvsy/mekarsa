@@ -1,3 +1,22 @@
+<?php
+require_once __DIR__ . '/src/config/database.php';
+
+try {
+    $pdo = getDBConnection();
+    $stmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+    $settings = $stmt->fetch(PDO::FETCH_ASSOC) ?: [
+        'business_name' => 'Mekarsa Coffee Bar',
+        'description' => 'Mekarsa Shoe Clean & Coffee Bar. Coffee First, Clean Vibes Always.',
+        'whatsapp' => '6285933504096',
+        'instagram' => 'mekarsaa',
+        'address' => 'Jl. Pabelan I, Gatak, Pabelan, Kec. Kartasura, Kabupaten Sukoharjo, Jawa Tengah 57169',
+        'opening_hours' => 'Senin – Jumat: 10:00 – 22:00, Sabtu – Minggu: 09:00 – 23:00'
+    ];
+    $wa_clean = preg_replace('/[^0-9]/', '', $settings['whatsapp']);
+} catch (PDOException $e) {
+    die("Database error.");
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,7 +24,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kontak & Lokasi - Mekarsa Coffee Bar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="public/css/style.css">
     <meta name="description" content="Temukan lokasi Mekarsa Coffee Bar di Jl. Pabelan I, Kartasura. Hubungi kami via WhatsApp atau Instagram @mekarsaa.">
     <style>
         /* Page Header */
@@ -169,18 +188,18 @@
     <header class="header">
         <div class="container navbar">
             <a href="index.php" class="nav-logo">
-                <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
                 Mekarsa<span>.</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.php">Beranda</a></li>
                 <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php">Tentang Kami</a></li>
-                <li><a href="articles.php">Artikel</a></li>
+                <li><a href="support-service.php">Shoe Clean</a></li>
                 <li><a href="contact.php" class="active">Kontak</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="https://wa.me/6285933504096" target="_blank" class="btn btn-primary">
+                <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="btn btn-primary">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </a>
             </div>
@@ -208,29 +227,31 @@
                         <div class="contact-card-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="contact-card-body">
                             <h4>Alamat</h4>
-                            <p>Jl. Pabelan I, Gatak, Pabelan, Kec. Kartasura, Kabupaten Sukoharjo, Jawa Tengah 57169</p>
+                            <p><?= htmlspecialchars($settings['address'] ?? '') ?></p>
                         </div>
                     </div>
 
                     <!-- WhatsApp -->
-                    <a href="https://wa.me/6285933504096" target="_blank" class="contact-card" style="text-decoration: none;">
+                    <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="contact-card" style="text-decoration: none;">
                         <div class="contact-card-icon"><i class="fab fa-whatsapp"></i></div>
                         <div class="contact-card-body">
                             <h4>WhatsApp</h4>
-                            <p>085933504096</p>
+                            <p><?= htmlspecialchars($settings['whatsapp'] ?? '') ?></p>
                             <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.2rem;">Klik untuk langsung chat →</p>
                         </div>
                     </a>
 
                     <!-- Instagram -->
-                    <a href="https://instagram.com/mekarsaa" target="_blank" class="contact-card" style="text-decoration: none;">
+                    <?php if(!empty($settings['instagram'])): ?>
+                    <a href="https://instagram.com/<?= htmlspecialchars($settings['instagram']) ?>" target="_blank" class="contact-card" style="text-decoration: none;">
                         <div class="contact-card-icon"><i class="fab fa-instagram"></i></div>
                         <div class="contact-card-body">
                             <h4>Instagram</h4>
-                            <p>@mekarsaa</p>
+                            <p>@<?= htmlspecialchars($settings['instagram']) ?></p>
                             <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.2rem;">Ikuti kami untuk promo terbaru →</p>
                         </div>
                     </a>
+                    <?php endif; ?>
 
                     <!-- Jam Operasional -->
                     <div class="contact-card" style="flex-direction: column; align-items: flex-start; gap: 1rem;">
@@ -240,20 +261,7 @@
                                 <h4>Jam Operasional</h4>
                             </div>
                         </div>
-                        <table class="hours-table">
-                            <tr>
-                                <td><strong>Senin – Jumat</strong></td>
-                                <td>10:00 – 22:00 WIB</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Sabtu – Minggu</strong></td>
-                                <td>09:00 – 23:00 WIB</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Hari Libur Nasional</strong></td>
-                                <td>Tetap Buka ✓</td>
-                            </tr>
-                        </table>
+                        <p style="color: var(--color-text-main); font-size: 1rem; line-height: 1.6;"><?= nl2br(htmlspecialchars($settings['opening_hours'] ?? '')) ?></p>
                     </div>
 
                 </div>
@@ -268,7 +276,7 @@
                         title="Lokasi Mekarsa Coffee Bar di Peta">
                     </iframe>
                     <div class="map-panel-footer">
-                        <p><i class="fas fa-map-pin"></i> Jl. Pabelan I, Gatak, Kartasura, Sukoharjo 57169</p>
+                        <p><i class="fas fa-map-pin"></i> <?= htmlspecialchars($settings['address'] ?? '') ?></p>
                         <a href="https://www.google.com/maps?q=-7.557739,110.766043"
                            target="_blank" class="btn btn-outline" style="border-radius: 30px; padding: 0.5rem 1.2rem; font-size: 0.85rem;">
                             <i class="fas fa-external-link-alt"></i> Buka di Google Maps
@@ -286,20 +294,17 @@
             <h2>Temukan Kami di Media Sosial</h2>
             <p class="section-subtitle">Ikuti akun kami untuk mendapatkan update menu, promo, dan konten seru dari Mekarsa.</p>
             <div class="social-grid">
-                <a href="https://instagram.com/mekarsaa" target="_blank" class="social-card" style="text-decoration: none;">
+                <?php if(!empty($settings['instagram'])): ?>
+                <a href="https://instagram.com/<?= htmlspecialchars($settings['instagram']) ?>" target="_blank" class="social-card" style="text-decoration: none;">
                     <i class="fab fa-instagram"></i>
                     <h4>Instagram</h4>
-                    <p>@mekarsaa</p>
+                    <p>@<?= htmlspecialchars($settings['instagram']) ?></p>
                 </a>
-                <a href="https://wa.me/6285933504096" target="_blank" class="social-card" style="text-decoration: none;">
+                <?php endif; ?>
+                <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="social-card" style="text-decoration: none;">
                     <i class="fab fa-whatsapp"></i>
                     <h4>WhatsApp</h4>
-                    <p>085933504096</p>
-                </a>
-                <a href="#" class="social-card" style="text-decoration: none;">
-                    <i class="fab fa-tiktok"></i>
-                    <h4>TikTok</h4>
-                    <p>@mekarsa.coffee</p>
+                    <p><?= htmlspecialchars($settings['whatsapp'] ?? '') ?></p>
                 </a>
             </div>
         </div>
@@ -311,14 +316,15 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="index.php" class="nav-logo" style="display: block; margin-bottom: 1rem;">
-                        <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
-                        Mekarsa<span>.</span>
+                        <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                        <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
                     </a>
-                    <p>Mekarsa Shoe Clean & Coffee Bar. Coffee First, Clean Vibes Always. Tempat nongkrong modern dengan sajian kopi lokal premium di Kartasura.</p>
+                    <p><?= htmlspecialchars($settings['description'] ?? 'Mekarsa Coffee Bar') ?></p>
                     <div class="social-links">
-                        <a href="https://instagram.com/mekarsaa" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="https://wa.me/6285933504096" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <?php if(!empty($settings['instagram'])): ?>
+                            <a href="https://instagram.com/<?= htmlspecialchars($settings['instagram']) ?>" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <?php endif; ?>
+                        <a href="https://wa.me/<?= $wa_clean ?>" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -327,8 +333,6 @@
                         <li><a href="index.php">Beranda</a></li>
                         <li><a href="menu.php">Menu Coffee</a></li>
                         <li><a href="about.php">Tentang Kami</a></li>
-                        <li><a href="articles.php">Artikel</a></li>
-                        <li><a href="testimonials.php">Testimoni</a></li>
                         <li><a href="support-service.php">Shoe Clean</a></li>
                         <li><a href="order.php">Form Pemesanan</a></li>
                     </ul>
@@ -336,28 +340,26 @@
                 <div class="footer-col">
                     <h4>Jam Buka</h4>
                     <ul class="footer-links">
-                        <li>Senin – Jumat: 10:00 – 22:00</li>
-                        <li>Sabtu – Minggu: 09:00 – 23:00</li>
-                        <li>*Hari libur tetap buka</li>
+                        <li><?= htmlspecialchars($settings['opening_hours'] ?? 'Buka Setiap Hari') ?></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Kontak & Lokasi</h4>
                     <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i> Jl. Pabelan I, Gatak, Pabelan, Kec. Kartasura, Sukoharjo 57169</li>
-                        <li><i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i> 085933504096</li>
-                        <li><i class="fab fa-instagram" style="color: var(--color-orange); margin-right: 8px;"></i> @mekarsaa</li>
+                        <li><i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i> <?= htmlspecialchars($settings['address'] ?? '') ?></li>
+                        <li><i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i> <?= htmlspecialchars($settings['whatsapp'] ?? '') ?></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 Mekarsa Coffee Bar. All Rights Reserved.
+                &copy; <?= date('Y') ?> <?= htmlspecialchars($settings['business_name']) ?>. All Rights Reserved.
+             <a href="portal-mekarsa/login.php" style="color: inherit; text-decoration: none; margin-left: 10px; opacity: 0.3; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.3'" title="Admin Login"><i class="fas fa-lock" style="font-size:0.85em;"></i></a>
             </div>
         </div>
     </footer>
 
     <!-- Floating WhatsApp -->
-    <a href="https://wa.me/6285933504096" target="_blank" class="float-wa" title="Hubungi kami via WhatsApp">
+    <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="float-wa" title="Hubungi kami via WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 

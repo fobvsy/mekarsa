@@ -1,15 +1,35 @@
+<?php
+require_once __DIR__ . '/src/config/database.php';
+try {
+    $pdo = getDBConnection();
+    // Ambil Settings
+    $stmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+    $settings = $stmt->fetch(PDO::FETCH_ASSOC) ?: [
+        'business_name' => 'Mekarsa Coffee Bar',
+        'tagline' => 'Coffee First, Clean Vibes Always',
+        'description' => '',
+        'whatsapp' => '6285933504096',
+        'instagram' => '',
+        'address' => '',
+        'opening_hours' => ''
+    ];
+    $wa_clean = preg_replace('/[^0-9]/', '', $settings['whatsapp']);
+} catch (PDOException $e) {
+    die("Error connecting to database.");
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tentang Kami - Mekarsa Coffee Bar</title>
+    <title>Tentang Kami - <?= htmlspecialchars($settings['business_name']) ?></title>
     <!-- Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="public/css/style.css">
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Profil Mekarsa Shoe Clean & Coffee Bar. Kami memadukan coffee lifestyle yang modern dengan layanan perawatan sepatu di Kartasura.">
+    <meta name="description" content="Tentang <?= htmlspecialchars(strip_tags($settings['business_name'])) ?>. <?= htmlspecialchars(strip_tags($settings['description'])) ?>">
     <style>
         .page-header {
             padding: 8rem 0 4rem;
@@ -126,18 +146,18 @@
     <header class="header">
         <div class="container navbar">
             <a href="index.php" class="nav-logo">
-                <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
-                Mekarsa<span>.</span>
+                <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.php">Beranda</a></li>
-                <li><a href="index.php#menu">Menu</a></li>
+                <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php" class="active">Tentang Kami</a></li>
-                <li><a href="index.php#shoeclean">Shoe Clean</a></li>
-                <li><a href="#contact">Kontak</a></li>
+                <li><a href="support-service.php">Shoe Clean</a></li>
+                <li><a href="contact.php">Kontak</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="https://wa.me/6285933504096" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Pesan Sekarang</a>
+                <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Pesan Sekarang</a>
             </div>
         </div>
     </header>
@@ -153,7 +173,7 @@
     <!-- About Section -->
     <section class="about-section container">
         <div class="about-image">
-            <img src="images/image2.jpeg" alt="Suasana Mekarsa Coffee Bar">
+            <img src="public/images/image2.jpeg" alt="Suasana Mekarsa Coffee Bar">
         </div>
         <div class="about-content">
             <h2>Konsep Kami</h2>
@@ -205,49 +225,50 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="index.php" class="nav-logo" style="display: block; margin-bottom: 1rem;">
-                        <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
-                        Mekarsa<span>.</span>
+                        <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                        <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
                     </a>
-                    <p>Mekarsa Shoe Clean & Coffee Bar. Coffee First, Clean Vibes Always. Tempat nongkrong modern dengan sajian kopi lokal premium di Kartasura.</p>
+                    <p><?= htmlspecialchars($settings['description'] ?? 'Mekarsa Coffee Bar') ?></p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <?php if(!empty($settings['instagram'])): ?>
+                            <a href="https://instagram.com/<?= htmlspecialchars($settings['instagram']) ?>" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <?php endif; ?>
+                        <a href="https://wa.me/<?= $wa_clean ?>" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
                     <h4>Menu Cepat</h4>
                     <ul class="footer-links">
                         <li><a href="index.php">Beranda</a></li>
-                        <li><a href="index.php#menu">Menu Coffee</a></li>
+                        <li><a href="menu.php">Menu Coffee</a></li>
                         <li><a href="about.php">Tentang Kami</a></li>
-                        <li><a href="index.php#shoeclean">Layanan Shoe Clean</a></li>
+                        <li><a href="articles.php">Artikel</a></li>
+                        <li><a href="support-service.php">Layanan Shoe Clean</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Jam Buka</h4>
                     <ul class="footer-links">
-                        <li>Senin - Jumat: 10:00 - 22:00</li>
-                        <li>Sabtu - Minggu: 09:00 - 23:00</li>
-                        <li>*Hari libur nasional tetap buka</li>
+                        <li><?= htmlspecialchars($settings['opening_hours'] ?? 'Buka Setiap Hari') ?></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Kontak & Lokasi</h4>
                     <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i> Jl. Pabelan I, Gatak, Pabelan, Kec. Kartasura, Sukoharjo, Jawa Tengah 57169</li>
-                        <li><i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i> 085933504096</li>
+                        <li><i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i> <?= htmlspecialchars($settings['address'] ?? '') ?></li>
+                        <li><i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i> <?= htmlspecialchars($settings['whatsapp'] ?? '') ?></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 &copy; 2026 Mekarsa Coffee Bar. All Rights Reserved.
+             <a href="portal-mekarsa/login.php" style="color: inherit; text-decoration: none; margin-left: 10px; opacity: 0.3; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.3'" title="Admin Login"><i class="fas fa-lock" style="font-size:0.85em;"></i></a>
             </div>
         </div>
     </footer>
 
     <!-- Floating WhatsApp -->
-    <a href="https://wa.me/6285933504096" target="_blank" class="float-wa" title="Hubungi kami via WhatsApp">
+    <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="float-wa" title="Hubungi kami via WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 

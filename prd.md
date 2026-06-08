@@ -520,18 +520,18 @@ Admin dapat:
 
 ```text
 mekarsa-web/
+├── index.php
+├── about.php
+├── menu.php
+├── product-detail.php
+├── articles.php
+├── article-detail.php
+├── gallery.php
+├── testimonials.php
+├── order.php
+├── support-service.php
+├── contact.php
 ├── public/
-│   ├── index.php
-│   ├── about.php
-│   ├── menu.php
-│   ├── product-detail.php
-│   ├── articles.php
-│   ├── article-detail.php
-│   ├── gallery.php
-│   ├── testimonials.php
-│   ├── order.php
-│   ├── support-service.php
-│   ├── contact.php
 │   ├── css/
 │   ├── js/
 │   ├── images/

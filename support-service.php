@@ -1,60 +1,27 @@
 <?php
-/**
- * Halaman frontend ONLY untuk Layanan Shoe Clean (Layanan Pendukung).
- * Data layanan di bawah bersifat DUMMY (mock data).
- * Nantinya diganti dengan query: SELECT * FROM support_services WHERE is_active = 1
- */
+require_once __DIR__ . '/src/config/database.php';
 
-$services = [
-    [
-        'id'        => 1,
-        'icon'      => 'fas fa-soap',
-        'name'      => 'Regular Clean',
-        'desc'      => 'Pembersihan dasar pada permukaan sepatu menggunakan produk premium. Cocok untuk perawatan rutin agar sepatu tetap bersih dan segar.',
-        'est_price' => 'Rp20.000 – Rp35.000',
-        'duration'  => '1–2 Jam',
-    ],
-    [
-        'id'        => 2,
-        'icon'      => 'fas fa-star',
-        'name'      => 'Deep Clean',
-        'desc'      => 'Pembersihan menyeluruh hingga sol dan bagian dalam sepatu. Menghilangkan kotoran membandel, jamur, dan bau tidak sedap secara total.',
-        'est_price' => 'Rp40.000 – Rp65.000',
-        'duration'  => '2–3 Jam',
-    ],
-    [
-        'id'        => 3,
-        'icon'      => 'fas fa-sun',
-        'name'      => 'Unyellowing',
-        'desc'      => 'Proses pemutihan dan pemulihan midsole yang menguning (yellowing) menggunakan teknik khusus agar sole kembali putih seperti baru.',
-        'est_price' => 'Rp45.000 – Rp70.000',
-        'duration'  => '3–5 Jam',
-    ],
-    [
-        'id'        => 4,
-        'icon'      => 'fas fa-paint-brush',
-        'name'      => 'Repaint & Recolor',
-        'desc'      => 'Pengecatan ulang sepatu dengan cat khusus berbahan kulit, kanvas, atau suede agar warna sepatu kembali solid dan tampak baru.',
-        'est_price' => 'Rp75.000 – Rp150.000',
-        'duration'  => '1–2 Hari',
-    ],
-    [
-        'id'        => 5,
-        'icon'      => 'fas fa-shield-alt',
-        'name'      => 'Premium Protection',
-        'desc'      => 'Pelapisan sepatu menggunakan cairan proteksi premium yang menolak air dan kotoran, menjaga sepatu tetap bersih lebih lama.',
-        'est_price' => 'Rp30.000 – Rp50.000',
-        'duration'  => '1 Jam',
-    ],
-    [
-        'id'        => 6,
-        'icon'      => 'fas fa-tools',
-        'name'      => 'Restorasi & Repair',
-        'desc'      => 'Perbaikan kerusakan ringan pada sepatu seperti sol mengelupas, jahitan terbuka, atau bahan yang retak agar sepatu dapat dipakai kembali.',
-        'est_price' => 'Rp50.000 – Rp120.000',
-        'duration'  => '1–3 Hari',
-    ],
-];
+try {
+    $pdo = getDBConnection();
+    
+    // Ambil daftar layanan
+    $stmt = $pdo->query("SELECT * FROM support_services WHERE status = 'active' ORDER BY id ASC");
+    $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ambil setting untuk kontak & WA
+    $setStmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+    $settings = $setStmt->fetch(PDO::FETCH_ASSOC) ?: [
+        'business_name' => 'Mekarsa Coffee Bar',
+        'description' => 'Mekarsa Shoe Clean & Coffee Bar. Coffee First, Clean Vibes Always.',
+        'whatsapp' => '6285933504096',
+        'address' => 'Jl. Pabelan I, Kartasura',
+        'opening_hours' => 'Setiap Hari'
+    ];
+    $wa_clean = preg_replace('/[^0-9]/', '', $settings['whatsapp']);
+
+} catch (PDOException $e) {
+    die("Database error.");
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -63,7 +30,7 @@ $services = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layanan Shoe Clean - Mekarsa Coffee Bar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="public/css/style.css">
     <meta name="description" content="Layanan perawatan dan pembersihan sepatu profesional di Mekarsa Shoe Clean & Coffee Bar, Kartasura. Regular clean, deep clean, unyellowing, repaint, dan restorasi.">
     <style>
         .page-header {
@@ -275,18 +242,18 @@ $services = [
     <header class="header">
         <div class="container navbar">
             <a href="index.php" class="nav-logo">
-                <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
                 Mekarsa<span>.</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.php">Beranda</a></li>
                 <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php">Tentang Kami</a></li>
-                <li><a href="articles.php">Artikel</a></li>
                 <li><a href="support-service.php" class="active">Shoe Clean</a></li>
+                <li><a href="contact.php">Kontak</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="https://wa.me/6285933504096" target="_blank" class="btn btn-primary">
+                <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="btn btn-primary">
                     <i class="fab fa-whatsapp"></i> Konsultasi Sekarang
                 </a>
             </div>
@@ -311,7 +278,7 @@ $services = [
             <h2>Sepatu Bersih,<br>Kopi Nikmat.</h2>
             <p>Mekarsa Shoe Clean hadir sebagai identitas unik yang melengkapi pengalaman nongkrong di Mekarsa Coffee Bar. Sambil kamu bersantai menikmati secangkir kopi, tim kami merawat sepatu kesayanganmu dengan penuh perhatian.</p>
             <p>Kami menggunakan produk-produk perawatan berkualitas dan teknik yang tepat untuk setiap jenis material sepatu, mulai dari kanvas, kulit, suede, hingga mesh. Hasilnya? Sepatu kembali bersih, terawat, dan siap dipakai.</p>
-            <a href="https://wa.me/6285933504096?text=Halo%20Mekarsa,%20saya%20ingin%20konsultasi%20layanan%20Shoe%20Clean" target="_blank" class="btn btn-primary" style="margin-top: 0.5rem;">
+            <a href="https://wa.me/<?= $wa_clean ?>?text=Halo%20<?= explode(' ', $settings['business_name'])[0] ?>,%20saya%20ingin%20konsultasi%20layanan%20Shoe%20Clean" target="_blank" class="btn btn-primary" style="margin-top: 0.5rem;">
                 <i class="fab fa-whatsapp"></i> Konsultasi via WhatsApp
             </a>
         </div>
@@ -326,15 +293,21 @@ $services = [
             <div class="service-catalog-grid">
                 <?php foreach ($services as $svc): ?>
                     <div class="service-catalog-card">
-                        <div class="service-icon-wrap">
-                            <i class="<?= $svc['icon'] ?>"></i>
-                        </div>
-                        <h3 class="service-card-name"><?= htmlspecialchars($svc['name']) ?></h3>
-                        <p class="service-card-desc"><?= htmlspecialchars($svc['desc']) ?></p>
+                        <?php if(!empty($svc['image'])): ?>
+                            <div class="service-icon-wrap" style="width:100%; height:180px; background:none; border-radius:8px; overflow:hidden; margin-bottom:1.2rem;">
+                                <img src="public/uploads/services/<?= htmlspecialchars($svc['image']) ?>" alt="<?= htmlspecialchars($svc['title']) ?>" style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                        <?php else: ?>
+                            <div class="service-icon-wrap">
+                                <i class="fas fa-shoe-prints"></i>
+                            </div>
+                        <?php endif; ?>
+                        <h3 class="service-card-name"><?= htmlspecialchars($svc['title']) ?></h3>
+                        <p class="service-card-desc"><?= nl2br(htmlspecialchars($svc['description'])) ?></p>
                         <div class="service-card-meta">
-                            <span class="service-card-price"><?= htmlspecialchars($svc['est_price']) ?></span>
+                            <span class="service-card-price">Mulai Rp<?= number_format($svc['price'], 0, ',', '.') ?></span>
                             <span class="service-card-duration">
-                                <i class="far fa-clock"></i> <?= htmlspecialchars($svc['duration']) ?>
+                                <i class="far fa-star"></i> Garansi Kepuasan
                             </span>
                         </div>
                     </div>
@@ -384,7 +357,7 @@ $services = [
                         Bagaimana cara pemesanan layanan shoe clean? <i class="fas fa-plus"></i>
                     </button>
                     <div class="faq-answer" id="faq4-answer">
-                        Cukup hubungi admin Mekarsa melalui WhatsApp di nomor 085933504096 atau datang langsung ke lokasi kami di Jl. Pabelan I, Kartasura. Tim kami akan melakukan konsultasi gratis sebelum pengerjaan dimulai.
+                        Cukup hubungi admin <?= htmlspecialchars($settings['business_name']) ?> melalui WhatsApp di nomor <?= htmlspecialchars($settings['whatsapp'] ?? '') ?> atau datang langsung ke lokasi kami. Tim kami akan melakukan konsultasi gratis sebelum pengerjaan dimulai.
                     </div>
                 </div>
             </div>
@@ -396,7 +369,7 @@ $services = [
         <div class="container">
             <h2>Siap Menitipkan Sepatumu?</h2>
             <p>Hubungi kami sekarang untuk konsultasi gratis. Datang ke Mekarsa, sambil ngopi, sepatu beres!</p>
-            <a href="https://wa.me/6285933504096?text=Halo%20Mekarsa,%20saya%20ingin%20konsultasi%20layanan%20Shoe%20Clean" target="_blank" class="btn btn-primary">
+            <a href="https://wa.me/<?= $wa_clean ?>?text=Halo%20<?= explode(' ', $settings['business_name'])[0] ?>,%20saya%20ingin%20konsultasi%20layanan%20Shoe%20Clean" target="_blank" class="btn btn-primary">
                 <i class="fab fa-whatsapp"></i> Hubungi Admin
             </a>
         </div>
@@ -408,14 +381,15 @@ $services = [
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="index.php" class="nav-logo" style="display: block; margin-bottom: 1rem;">
-                        <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
-                        Mekarsa<span>.</span>
+                        <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                        <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
                     </a>
-                    <p>Mekarsa Shoe Clean & Coffee Bar. Coffee First, Clean Vibes Always. Tempat nongkrong modern dengan sajian kopi lokal premium di Kartasura.</p>
+                    <p><?= htmlspecialchars($settings['description'] ?? 'Mekarsa Coffee Bar') ?></p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <?php if(!empty($settings['instagram'])): ?>
+                            <a href="https://instagram.com/<?= htmlspecialchars($settings['instagram']) ?>" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <?php endif; ?>
+                        <a href="https://wa.me/<?= $wa_clean ?>" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -431,27 +405,26 @@ $services = [
                 <div class="footer-col">
                     <h4>Jam Buka</h4>
                     <ul class="footer-links">
-                        <li>Senin – Jumat: 10:00 – 22:00</li>
-                        <li>Sabtu – Minggu: 09:00 – 23:00</li>
-                        <li>*Hari libur tetap buka</li>
+                        <li><?= htmlspecialchars($settings['opening_hours'] ?? 'Buka Setiap Hari') ?></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Kontak & Lokasi</h4>
                     <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i> Jl. Pabelan I, Gatak, Pabelan, Kec. Kartasura, Sukoharjo 57169</li>
-                        <li><i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i> 085933504096</li>
+                        <li><i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i> <?= htmlspecialchars($settings['address'] ?? '') ?></li>
+                        <li><i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i> <?= htmlspecialchars($settings['whatsapp'] ?? '') ?></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 Mekarsa Coffee Bar. All Rights Reserved.
+                &copy; <?= date('Y') ?> <?= htmlspecialchars($settings['business_name']) ?>. All Rights Reserved.
+             <a href="portal-mekarsa/login.php" style="color: inherit; text-decoration: none; margin-left: 10px; opacity: 0.3; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.3'" title="Admin Login"><i class="fas fa-lock" style="font-size:0.85em;"></i></a>
             </div>
         </div>
     </footer>
 
     <!-- Floating WhatsApp -->
-    <a href="https://wa.me/6285933504096" target="_blank" class="float-wa" title="Konsultasi via WhatsApp">
+    <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="float-wa" title="Konsultasi via WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 

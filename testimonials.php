@@ -1,61 +1,34 @@
 <?php
-/**
- * Halaman frontend ONLY untuk Testimoni Pelanggan.
- * Data di bawah bersifat DUMMY (mock data) untuk memudahkan pembuatan struktur frontend.
- * Nantinya variabel $testimonials ini diganti dengan query database:
- * SELECT * FROM testimonials ORDER BY created_at DESC
- */
+require_once __DIR__ . '/src/config/database.php';
+try {
+    $pdo = getDBConnection();
+    
+    // Ambil Settings
+    $stmt = $pdo->query("SELECT * FROM settings LIMIT 1");
+    $settings = $stmt->fetch(PDO::FETCH_ASSOC) ?: [
+        'business_name' => 'Mekarsa Coffee Bar',
+        'tagline' => 'Coffee First, Clean Vibes Always',
+        'description' => '',
+        'whatsapp' => '6285933504096',
+        'instagram' => '',
+        'address' => '',
+        'opening_hours' => ''
+    ];
+    $wa_clean = preg_replace('/[^0-9]/', '', $settings['whatsapp']);
 
-$testimonials = [
-    [
-        'id'       => 1,
-        'name'     => 'Rizky Aditya',
-        'role'     => 'Mahasiswa UMS',
-        'rating'   => 5,
-        'content'  => 'KopSu Mekarsa emang beda! Satu-satunya tempat kopi di Pabelan yang bikin aku betah berjam-jam ngerjain tugas. Rasa kopinya pas, harganya masuk akal, dan tempatnya bersih banget.',
-        'initials' => 'RA',
-    ],
-    [
-        'id'       => 2,
-        'name'     => 'Sinta Dewi',
-        'role'     => 'Karyawan Swasta',
-        'rating'   => 5,
-        'content'  => 'Suka banget sama vibe-nya Mekarsa. Setelah capek kerja seharian, mampir sini minum Butterscotch sambil dengerin musik tuh rasanya healing banget. Highly recommended!',
-        'initials' => 'SD',
-    ],
-    [
-        'id'       => 3,
-        'name'     => 'Farhan Nugroho',
-        'role'     => 'Content Creator',
-        'rating'   => 5,
-        'content'  => 'Konsep coffee bar + shoe clean ini unik abis. Aku sekalian bersihin sneakers sambil nongkrong dan minum KopSu Gula Aren. Pelayanannya ramah dan cepat. Bakalan balik lagi!',
-        'initials' => 'FN',
-    ],
-    [
-        'id'       => 4,
-        'name'     => 'Aulia Rahmawati',
-        'role'     => 'Mahasiswi UNS',
-        'rating'   => 5,
-        'content'  => 'Americano-nya strong tapi ga bikin perut mual. Cocok banget buat yang lagi ngoding atau nulis skripsi. WiFi kenceng, stop kontak banyak, tempat nyaman. 10/10!',
-        'initials' => 'AR',
-    ],
-    [
-        'id'       => 5,
-        'name'     => 'Bima Saputra',
-        'role'     => 'Pengusaha Muda',
-        'rating'   => 4,
-        'content'  => 'Tempatnya enak buat meeting santai. Suasana minimalis, pencahayaan bagus. V60 Manual Brew-nya juga worth it banget untuk harganya. Bakal sering balik ke sini.',
-        'initials' => 'BS',
-    ],
-    [
-        'id'       => 6,
-        'name'     => 'Nadia Putri',
-        'role'     => 'Freelancer',
-        'rating'   => 5,
-        'content'  => 'KopSu Vanilla Mekarsa adalah yang terenak yang pernah aku coba di Kartasura! Harum vanillanya pas, tidak terlalu manis, dan after-taste kopinya masih berasa. Wajib coba!',
-        'initials' => 'NP',
-    ],
-];
+    // Ambil Testimonials
+    $testStmt = $pdo->query("SELECT * FROM testimonials WHERE status = 'show' ORDER BY id DESC");
+    $testimonials = $testStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ambil Stats
+    $statStmt = $pdo->query("SELECT COUNT(id) as total_reviews, AVG(rating) as avg_rating FROM testimonials WHERE status = 'show'");
+    $stats = $statStmt->fetch(PDO::FETCH_ASSOC);
+    $total_reviews = $stats['total_reviews'] ?: 0;
+    $avg_rating = $stats['avg_rating'] ? number_format($stats['avg_rating'], 1) : '5.0';
+
+} catch (PDOException $e) {
+    die("Error connecting to database.");
+}
 
 function renderStars(int $rating): string {
     $stars = '';
@@ -70,10 +43,10 @@ function renderStars(int $rating): string {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Testimoni Pelanggan - Mekarsa Coffee Bar</title>
+    <title>Testimoni Pelanggan - <?= htmlspecialchars($settings['business_name']) ?></title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <meta name="description" content="Apa kata pelanggan setia Mekarsa Coffee Bar? Baca ulasan jujur mereka tentang menu, suasana, dan layanan kami.">
+    <link rel="stylesheet" href="public/css/style.css">
+    <meta name="description" content="Apa kata pelanggan setia <?= htmlspecialchars(strip_tags($settings['business_name'])) ?>? Baca ulasan jujur mereka.">
     <style>
         /* Page Header */
         .page-header {
@@ -149,18 +122,18 @@ function renderStars(int $rating): string {
     <header class="header">
         <div class="container navbar">
             <a href="index.php" class="nav-logo">
-                <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
-                Mekarsa<span>.</span>
+                <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.php">Beranda</a></li>
                 <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php">Tentang Kami</a></li>
-                <li><a href="articles.php">Artikel</a></li>
-                <li><a href="testimonials.php" class="active">Testimoni</a></li>
+                <li><a href="support-service.php">Shoe Clean</a></li>
+                <li><a href="contact.php">Kontak</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="https://wa.me/6285933504096" target="_blank" class="btn btn-primary">
+                <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="btn btn-primary">
                     <i class="fab fa-whatsapp"></i> Pesan Sekarang
                 </a>
             </div>
@@ -182,7 +155,7 @@ function renderStars(int $rating): string {
             <!-- Stats Bar -->
             <div class="stats-bar">
                 <div class="stat-item">
-                    <span class="stat-number">4.9</span>
+                    <span class="stat-number"><?= $avg_rating ?></span>
                     <div class="overall-rating">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -193,7 +166,7 @@ function renderStars(int $rating): string {
                     <span class="stat-label">Rating Rata-rata</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number"><?= count($testimonials) ?>+</span>
+                    <span class="stat-number"><?= $total_reviews ?></span>
                     <span class="stat-label">Ulasan Masuk</span>
                 </div>
                 <div class="stat-item">
@@ -208,24 +181,28 @@ function renderStars(int $rating): string {
 
             <!-- Testimonial Grid -->
             <div class="testimonial-grid">
-                <?php foreach ($testimonials as $t): ?>
-                    <div class="testimonial-card">
-                        <i class="fas fa-quote-right testimonial-quote-icon"></i>
-                        <p class="testimonial-content">"<?= htmlspecialchars($t['content']) ?>"</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar">
-                                <?= htmlspecialchars($t['initials']) ?>
-                            </div>
-                            <div class="testimonial-author-info">
-                                <h4><?= htmlspecialchars($t['name']) ?></h4>
-                                <p><?= htmlspecialchars($t['role']) ?></p>
-                                <div class="testimonial-rating">
-                                    <?= renderStars($t['rating']) ?>
+                <?php if (!empty($testimonials)): ?>
+                    <?php foreach ($testimonials as $t): ?>
+                        <div class="testimonial-card">
+                            <i class="fas fa-quote-right testimonial-quote-icon"></i>
+                            <p class="testimonial-content">"<?= htmlspecialchars($t['message']) ?>"</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">
+                                    <?= strtoupper(substr($t['customer_name'], 0, 2)) ?>
+                                </div>
+                                <div class="testimonial-author-info">
+                                    <h4><?= htmlspecialchars($t['customer_name']) ?></h4>
+                                    <p>Pelanggan</p>
+                                    <div class="testimonial-rating">
+                                        <?= renderStars($t['rating']) ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style="text-align: center; color: var(--color-gray); width: 100%;">Belum ada testimoni.</p>
+                <?php endif; ?>
             </div>
 
         </div>
@@ -236,7 +213,7 @@ function renderStars(int $rating): string {
         <div class="container">
             <h2>Jadilah Bagian dari Keluarga Mekarsa!</h2>
             <p>Kunjungi kami dan rasakan sendiri pengalaman coffee terbaik di Kartasura.</p>
-            <a href="https://wa.me/6285933504096" target="_blank" class="btn btn-primary">
+            <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="btn btn-primary">
                 <i class="fab fa-whatsapp"></i> Hubungi Kami
             </a>
         </div>
@@ -248,14 +225,15 @@ function renderStars(int $rating): string {
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="index.php" class="nav-logo" style="display: block; margin-bottom: 1rem;">
-                        <img src="images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
-                        Mekarsa<span>.</span>
+                        <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
+                        <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
                     </a>
-                    <p>Mekarsa Shoe Clean & Coffee Bar. Coffee First, Clean Vibes Always. Tempat nongkrong modern dengan sajian kopi lokal premium di Kartasura.</p>
+                    <p><?= htmlspecialchars($settings['description'] ?? 'Mekarsa Coffee Bar') ?></p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <?php if(!empty($settings['instagram'])): ?>
+                            <a href="https://instagram.com/<?= htmlspecialchars($settings['instagram']) ?>" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <?php endif; ?>
+                        <a href="https://wa.me/<?= $wa_clean ?>" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -264,16 +242,13 @@ function renderStars(int $rating): string {
                         <li><a href="index.php">Beranda</a></li>
                         <li><a href="menu.php">Menu Coffee</a></li>
                         <li><a href="about.php">Tentang Kami</a></li>
-                        <li><a href="articles.php">Artikel</a></li>
-                        <li><a href="testimonials.php">Testimoni</a></li>
+                        <li><a href="support-service.php">Layanan Shoe Clean</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Jam Buka</h4>
                     <ul class="footer-links">
-                        <li>Senin - Jumat: 10:00 - 22:00</li>
-                        <li>Sabtu - Minggu: 09:00 - 23:00</li>
-                        <li>*Hari libur nasional tetap buka</li>
+                        <li><?= htmlspecialchars($settings['opening_hours'] ?? 'Buka Setiap Hari') ?></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -281,23 +256,24 @@ function renderStars(int $rating): string {
                     <ul class="footer-links">
                         <li>
                             <i class="fas fa-map-marker-alt" style="color: var(--color-orange); margin-right: 8px;"></i>
-                            Jl. Pabelan I, Gatak, Pabelan, Kec. Kartasura, Sukoharjo, Jawa Tengah 57169
+                            <?= htmlspecialchars($settings['address'] ?? '') ?>
                         </li>
                         <li>
                             <i class="fab fa-whatsapp" style="color: var(--color-orange); margin-right: 8px;"></i>
-                            085933504096
+                            <?= htmlspecialchars($settings['whatsapp'] ?? '') ?>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 Mekarsa Coffee Bar. All Rights Reserved.
+                &copy; <?= date('Y') ?> <?= htmlspecialchars($settings['business_name']) ?>. All Rights Reserved.
+             <a href="portal-mekarsa/login.php" style="color: inherit; text-decoration: none; margin-left: 10px; opacity: 0.3; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.3'" title="Admin Login"><i class="fas fa-lock" style="font-size:0.85em;"></i></a>
             </div>
         </div>
     </footer>
 
     <!-- Floating WhatsApp -->
-    <a href="https://wa.me/6285933504096" target="_blank" class="float-wa" title="Hubungi kami via WhatsApp">
+    <a href="https://wa.me/<?= $wa_clean ?>" target="_blank" class="float-wa" title="Hubungi kami via WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 
