@@ -1212,6 +1212,22 @@ h2 {
 }
 
 /* Responsive */
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--color-text-main);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+.hamburger:hover {
+  color: var(--color-orange);
+}
+
 @media (max-width: 992px) {
   .hero-title {
     font-size: 3.5rem;
@@ -1246,8 +1262,61 @@ h2 {
     justify-content: center;
   }
 
-  .nav-links,
-  .nav-actions .btn-outline {
+  .hamburger {
+    display: block;
+  }
+
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 1rem;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-main);
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    display: none;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+
+  .nav-links.active {
+    display: flex;
+    animation: slideDown 0.3s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 1.2rem 1.5rem;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+  }
+
+  .nav-links a:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-orange);
+  }
+
+  .nav-actions {
     display: none;
   }
 

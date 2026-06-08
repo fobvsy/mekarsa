@@ -126,7 +126,10 @@ try {
                 <img src="public/images/logo.png" alt="Mekarsa Logo" class="navbar-logo-img">
                 <?= htmlspecialchars(explode(' ', $settings['business_name'])[0]) ?><span>.</span>
             </a>
-                        <ul class="nav-links">
+                                    <button class="hamburger" id="hamburger" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.php">Beranda</a></li>
                 <li><a href="menu.php">Menu</a></li>
                 <li><a href="about.php">Tentang Kami</a></li>
@@ -272,5 +275,6 @@ try {
     </a>
     <?php endif; ?>
 
+    <script src="public/js/main.js"></script>
 </body>
 </html>

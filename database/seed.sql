@@ -8,8 +8,8 @@
 -- ============================================================
 -- 1. Admin Default
 -- ============================================================
--- INSERT INTO `admins` (`name`, `username`, `password`) VALUES
--- ('Admin Mekarsa', 'admin', '$2y$10$Yn/vBCRyIK/Hf0AevQuY2O.gG3.WYK.pQGyjkKeCa8G7uaDX0hf7e');
+INSERT INTO `admins` (`name`, `username`, `password`) VALUES
+('Admin Mekarsa', 'admin', '$2y$10$Yn/vBCRyIK/Hf0AevQuY2O.gG3.WYK.pQGyjkKeCa8G7uaDX0hf7e');
 
 -- ============================================================
 -- 2. Kategori Produk Coffee
