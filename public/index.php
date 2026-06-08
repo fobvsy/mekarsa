@@ -233,6 +233,98 @@
         </div>
     </section>
 
+    <!-- Testimoni Carousel Section -->
+    <section class="menu-section" style="padding: 5rem 0;">
+        <div class="container">
+            <h2>Kata Mereka</h2>
+            <p class="section-subtitle">Ulasan jujur dari pelanggan setia Mekarsa.</p>
+
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="testimonialTrack">
+                    <!-- Card 1 -->
+                    <div class="carousel-slide">
+                        <div class="testimonial-card">
+                            <i class="fas fa-quote-right testimonial-quote-icon"></i>
+                            <p class="testimonial-content">"KopSu Mekarsa emang beda! Satu-satunya tempat kopi di Pabelan yang bikin aku betah berjam-jam ngerjain tugas. Rasa kopinya pas, harganya masuk akal, dan tempatnya bersih banget."</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">RA</div>
+                                <div class="testimonial-author-info">
+                                    <h4>Rizky Aditya</h4>
+                                    <p>Mahasiswa UMS</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="carousel-slide">
+                        <div class="testimonial-card">
+                            <i class="fas fa-quote-right testimonial-quote-icon"></i>
+                            <p class="testimonial-content">"Suka banget sama vibe-nya Mekarsa. Setelah capek kerja seharian, mampir sini minum Butterscotch sambil dengerin musik tuh rasanya healing banget. Highly recommended!"</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">SD</div>
+                                <div class="testimonial-author-info">
+                                    <h4>Sinta Dewi</h4>
+                                    <p>Karyawan Swasta</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="carousel-slide">
+                        <div class="testimonial-card">
+                            <i class="fas fa-quote-right testimonial-quote-icon"></i>
+                            <p class="testimonial-content">"Konsep coffee bar + shoe clean ini unik abis. Aku sekalian bersihin sneakers sambil nongkrong dan minum KopSu Gula Aren. Pelayanannya ramah dan cepat. Bakalan balik lagi!"</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">FN</div>
+                                <div class="testimonial-author-info">
+                                    <h4>Farhan Nugroho</h4>
+                                    <p>Content Creator</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="carousel-slide">
+                        <div class="testimonial-card">
+                            <i class="fas fa-quote-right testimonial-quote-icon"></i>
+                            <p class="testimonial-content">"Americano-nya strong tapi ga bikin perut mual. Cocok banget buat yang lagi ngoding atau nulis skripsi. WiFi kenceng, stop kontak banyak, tempat nyaman. 10/10!"</p>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">AR</div>
+                                <div class="testimonial-author-info">
+                                    <h4>Aulia Rahmawati</h4>
+                                    <p>Mahasiswi UNS</p>
+                                    <div class="testimonial-rating">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="prevBtn" aria-label="Sebelumnya"><i class="fas fa-arrow-left"></i></button>
+                <div class="carousel-dots" id="carouselDots"></div>
+                <button class="carousel-btn" id="nextBtn" aria-label="Berikutnya"><i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="testimonials.php" class="btn btn-outline" style="border-radius: 30px;">Lihat Semua Testimoni</a>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
@@ -258,10 +350,12 @@
                 <div class="footer-col">
                     <h4>Menu Cepat</h4>
                     <ul class="footer-links">
-                        <li><a href="#home">Beranda</a></li>
-                        <li><a href="#menu">Menu Coffee</a></li>
-                        <li><a href="#about">Tentang Kami</a></li>
-                        <li><a href="#shoeclean">Layanan Shoe Clean</a></li>
+                        <li><a href="index.php">Beranda</a></li>
+                        <li><a href="menu.php">Menu Coffee</a></li>
+                        <li><a href="about.php">Tentang Kami</a></li>
+                        <li><a href="articles.php">Artikel</a></li>
+                        <li><a href="testimonials.php">Testimoni</a></li>
+                        <li><a href="index.php#shoeclean">Layanan Shoe Clean</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -291,8 +385,9 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Smooth Scrolling Script -->
+    <!-- Smooth Scrolling + Carousel Script -->
     <script>
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -301,6 +396,50 @@
                 });
             });
         });
+
+        // Testimonial Carousel
+        (function () {
+            const track = document.getElementById('testimonialTrack');
+            const slides = track ? track.querySelectorAll('.carousel-slide') : [];
+            const dotsContainer = document.getElementById('carouselDots');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (!track || slides.length === 0) return;
+
+            let current = 0;
+            let autoTimer;
+
+            // Build dots
+            slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+                dot.addEventListener('click', () => goTo(i));
+                dotsContainer.appendChild(dot);
+            });
+
+            function goTo(index) {
+                current = (index + slides.length) % slides.length;
+                track.style.transform = `translateX(-${current * 100}%)`;
+                document.querySelectorAll('.carousel-dot').forEach((d, i) =>
+                    d.classList.toggle('active', i === current)
+                );
+            }
+
+            function startAuto() {
+                autoTimer = setInterval(() => goTo(current + 1), 4500);
+            }
+
+            function stopAuto() {
+                clearInterval(autoTimer);
+            }
+
+            prevBtn.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+            nextBtn.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+
+            startAuto();
+        })();
     </script>
 </body>
 </html>
